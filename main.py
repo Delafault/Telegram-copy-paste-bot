@@ -18,6 +18,8 @@ logo = """
 █▀▀ █▀█ █▀█ █▄█ ▄▄ █▀█ ▄▀█ █▀ ▀█▀ █▀▀   █▄▄ █▀█ ▀█▀|ᵇʸ ᵈᵉˡᵃᶠᵃᵘˡᵗ
 █▄▄ █▄█ █▀▀ ░█░ ░░ █▀▀ █▀█ ▄█ ░█░ ██▄   █▄█ █▄█ ░█░"""
 
+last_id_message = []
+
 def gd_print(value):
     green_color = '\033[32m'
     reset_color = '\033[0m'
@@ -65,6 +67,10 @@ async def handler(event):
     media = []
     caption = event.messages[0].text
     force_document = False
+    id = event.messages[0].id
+    if id in last_id_message:
+        return # Album почему-то иногда получает ивент дважды на одно сообщение.
+    last_id_message.append(id)
 
     caption = await check_caption(caption)
 
@@ -84,6 +90,8 @@ async def handler(event):
 
     await client.send_file(CHANNEL_PASTE, media, caption=caption, force_document=force_document)
     gd_print(f"Скопировали и успешно отправили альбом из {len(event)} сообщений.")
+
+    last_id_message.clear()
     for file in media:
         os.remove(file) # использование временной папки оказалось самым удобным способом.
 
@@ -143,7 +151,11 @@ async def copy(event):
         os.remove(f"temp_pics/{file_name}")
 
     else:
-        await client.send_message(CHANNEL_PASTE, caption)
+        try:
+            await client.send_message(CHANNEL_PASTE, caption)
+        except Exception as e:
+            bd_print(f"Ошибка при отправке сообщения: {e}")
+            return
 
     gd_print(f"Скопировали и успешно отправили сообщение {id}.")
 
