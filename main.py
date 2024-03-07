@@ -69,6 +69,7 @@ async def handler(event):
     force_document = False
     id = event.messages[0].id
     if id in last_id_message:
+        last_id_message.clear()
         return # Album почему-то иногда получает ивент дважды на одно сообщение.
     last_id_message.append(id)
 
@@ -91,7 +92,6 @@ async def handler(event):
     await client.send_file(CHANNEL_PASTE, media, caption=caption, force_document=force_document)
     gd_print(f"Скопировали и успешно отправили альбом из {len(event)} сообщений.")
 
-    last_id_message.clear()
     for file in media:
         os.remove(file) # использование временной папки оказалось самым удобным способом.
 
