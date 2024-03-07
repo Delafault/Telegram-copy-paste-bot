@@ -50,7 +50,7 @@ client = TelegramClient(
     system_version = SYSTEM_VERSION
 ) # Создание клиента
 
-@client.on(events.Album(CHANNELS_COPY)) # Обработка альбомов. Альбомы не поддерживают по дефолту 'forward', поэтому придётся обрабатывать это отдельно.
+@client.on(events.Album(CHANNELS_COPY)) # Альбомы не поддерживают по дефолту 'forward', поэтому придётся обрабатывать это отдельно.
 async def handler(event):
     """
     Обработка альбомов
