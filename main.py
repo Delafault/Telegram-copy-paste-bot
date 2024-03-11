@@ -48,7 +48,7 @@ client = TelegramClient(
     api_hash = API_HASH,
     device_model = DEVICE_MODEL,
     system_version = SYSTEM_VERSION
-) # Создание клиента
+)
 
 @client.on(events.Album(CHANNELS_COPY))
 async def album_handler(event):
