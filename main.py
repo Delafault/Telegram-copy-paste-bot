@@ -32,7 +32,7 @@ def bd_print(value):
     result = f"\n>{red_color} {value} {reset_color}\n"
     print(result)
 
-async def check_caption(caption): # Проверка текста на наличие ссылок и работа с ними
+async def check_caption(caption):
     if AUTO_DELETE_LINKS is False:
         return caption
     elif AUTO_DELETE_LINKS is True:
@@ -50,8 +50,8 @@ client = TelegramClient(
     system_version = SYSTEM_VERSION
 ) # Создание клиента
 
-@client.on(events.Album(CHANNELS_COPY)) # Альбомы не поддерживают по дефолту 'forward', поэтому придётся обрабатывать это отдельно.
-async def handler(event):
+@client.on(events.Album(CHANNELS_COPY))
+async def album_handler(event):
     """
     Обработка альбомов
     """
@@ -97,7 +97,7 @@ async def handler(event):
 
 
 @client.on(events.NewMessage(CHANNELS_COPY, forwards=FORWARDS))
-async def copy(event):
+async def message_handler(event):
     """
     Обработка сообщений
     """
